@@ -12,14 +12,14 @@ A structured approach to mastering the Go programming language.
 - [x] **Control Flow**: `if`, `else`, `switch`, and the single loop (`for`).
 
 ### Phase 2: Core Structures (1-2 Weeks)
-- [ ] **Arrays & Slices**: Understanding the difference and how slices work under the hood.
-- [ ] **Maps**: Key-value pairs and efficient lookups.
-- [ ] **Structs**: Building custom types and grouping data.
-- [ ] **Functions & Methods**: Multiple return values, variadic functions, and receiver functions.
+- [x] **Arrays & Slices**: Understanding the difference and how slices work under the hood.
+- [x] **Maps**: Key-value pairs and efficient lookups.
+- [x] **Structs**: Building custom types and grouping data.
+- [x] **Functions & Methods**: Multiple return values, variadic functions, and receiver functions.
 
 ### Phase 3: Pointers & Interfaces (1-2 Weeks)
-- [ ] **Pointers**: Passing by value vs. passing by reference.
-- [ ] **Interfaces**: Achieving polymorphism through implicit satisfaction.
+- [x] **Pointers**: Passing by value vs. passing by reference.
+- [x] **Interfaces**: Achieving polymorphism through implicit satisfaction.
 - [ ] **Errors & Defer**: Proper error handling and cleaning up resources.
 
 ### Phase 4: Concurrency (2-3 Weeks)

@@ -14,6 +14,7 @@ This repository is dedicated to tracking my progress and learning journey in the
 - `/functions-methods`: Function definitions, closures, and methods.
 - `/interfaces`: Polymorphism and interface implementations.
 - `/concurrency`: Goroutines, channels, and synchronization primitives.
+- `/pointers`: Understanding memory addresses and modification of data.
 - `/standard-library`: Exploring common packages in the Go standard library.
 - `/projects`: Small to medium-sized projects built with Go.
 - `/exercises`: Hands-on challenges to test your knowledge.
