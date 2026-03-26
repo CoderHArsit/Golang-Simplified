@@ -26,7 +26,30 @@ Anonymous functions that "capture" variables from their surrounding scope. Usefu
 go run functions-methods/01_basics/main.go
 # or
 go run functions-methods/02_functions_deep_dive/main.go
+# or
+go run functions-methods/03_method_receivers/main.go
 ```
+
+## 🧠 Deep Dive: Method Receivers
+
+### Value Receiver `(u User)` — The Photocopy
+- Gets a **copy** of the struct.
+- Changes inside the method are **lost** when the method returns.
+- Use for: reading data, simple getters.
+
+### Pointer Receiver `(u *User)` — The Key to the Locker
+- Gets the **memory address** of the struct.
+- Changes inside the method **modify the original**.
+- Use for: setters, mutations, or when the struct is large (avoids expensive copies).
+
+### Method Sets Rule
+| Type | Can call |
+| :--- | :--- |
+| `T` (value) | Only value receiver methods |
+| `*T` (pointer) | Both value AND pointer receiver methods |
+
+**Go's Auto-Conversion**: When you call `acc.Deposit(500)` on a value, Go automatically converts it to `(&acc).Deposit(500)` for you.
+
 
 ## 🧠 Deep Dive: Functions
 

@@ -20,7 +20,7 @@ A structured approach to mastering the Go programming language.
 ### Phase 3: Pointers & Interfaces (1-2 Weeks)
 - [x] **Pointers**: Passing by value vs. passing by reference.
 - [x] **Interfaces**: Achieving polymorphism through implicit satisfaction.
-- [ ] **Errors & Defer**: Proper error handling and cleaning up resources.
+- [x] **Errors & Defer**: Proper error handling and cleaning up resources.
 
 ### Phase 4: Concurrency (2-3 Weeks)
 - [ ] **Goroutines**: Lightweight threads for concurrent execution.
