@@ -23,9 +23,9 @@ A structured approach to mastering the Go programming language.
 - [x] **Errors & Defer**: Proper error handling and cleaning up resources.
 
 ### Phase 4: Concurrency (2-3 Weeks)
-- [ ] **Goroutines**: Lightweight threads for concurrent execution.
-- [ ] **Channels**: Communication between goroutines (CSP model).
-- [ ] **Select & WaitGroups**: Coordinating multiple goroutines and synchronized termination.
+- [x] **Goroutines**: Lightweight threads for concurrent execution.
+- [x] **Channels**: Communication between goroutines (CSP model).
+- [x] **Select & WaitGroups**: Coordinating multiple goroutines and synchronized termination.
 
 ### Phase 5: Advanced Topics & Projects (Ongoing)
 - [ ] **Testing**: Writing unit tests and benchmarks with the `testing` package.
