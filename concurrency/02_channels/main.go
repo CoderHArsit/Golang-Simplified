@@ -75,6 +75,51 @@ func main() {
 	ping(pings, "Hello!")
 	pong(pings, pongs)
 	fmt.Println("Pong received:", <-pongs)
+
+	// 6. Channel Axioms — nil & closed channel behavior
+	// ============================================================
+	// These are TRICKY interview questions!
+	//
+	// ┌───────────┬─────────────────┬─────────────────────────────┐
+	// │ Operation │   nil channel   │      closed channel         │
+	// ├───────────┼─────────────────┼─────────────────────────────┤
+	// │ Send      │ blocks forever  │ PANIC!                      │
+	// │ Receive   │ blocks forever  │ returns zero value (+ false)│
+	// │ Close     │ PANIC!          │ PANIC!                      │
+	// └───────────┴─────────────────┴─────────────────────────────┘
+	//
+	// Key rules:
+	//   - Only the SENDER should close a channel, never the receiver.
+	//   - Closing is only necessary when the receiver needs to know
+	//     that no more values are coming (e.g., range loop).
+	//   - You CAN read from a closed channel (returns zero values).
+	//   - You CANNOT send to a closed channel (panics!).
+	//   - nil channels are useful in select to disable a case.
+	// ============================================================
+	fmt.Println("\n--- Channel Axioms ---")
+
+	// Reading from a CLOSED channel returns zero value + false
+	axiomCh := make(chan int, 2)
+	axiomCh <- 42
+	axiomCh <- 99
+	close(axiomCh)
+
+	val1, ok1 := <-axiomCh
+	fmt.Printf("Read 1: value=%d, ok=%t (buffered data)\n", val1, ok1)
+	val2, ok2 := <-axiomCh
+	fmt.Printf("Read 2: value=%d, ok=%t (buffered data)\n", val2, ok2)
+	val3, ok3 := <-axiomCh
+	fmt.Printf("Read 3: value=%d, ok=%t ← closed! zero value returned\n", val3, ok3)
+
+	// The comma-ok idiom: always check 'ok' to detect closed channels
+	// if !ok { fmt.Println("Channel closed, stop reading!") }
+	//
+	// PANIC examples (DO NOT uncomment!):
+	//   axiomCh <- 1       // panic: send on closed channel
+	//   close(axiomCh)     // panic: close of closed channel
+	//
+	//   var nilCh chan int
+	//   close(nilCh)       // panic: close of nil channel
 }
 
 // send-only channel (chan<-)
