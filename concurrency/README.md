@@ -127,3 +127,73 @@ g.Go(func() error { return doWork() })
 if err := g.Wait(); err != nil { ... }
 ```
 
+---
+
+## 🎯 Interview Questions
+
+### Q1: What is a goroutine? How is it different from an OS thread?
+**Answer:** A goroutine is a **lightweight thread** managed by the Go runtime, not the OS. Key differences:
+- **Stack size**: Goroutine starts at ~2KB (grows dynamically) vs ~1MB for an OS thread.
+- **Scheduling**: Go uses an M:N scheduler (many goroutines on few OS threads) — cheaper context switches.
+- **Creation**: `go func()` is trivial; millions of goroutines are practical.
+
+### Q2: What is the difference between concurrency and parallelism?
+**Answer:**
+- **Concurrency** = program **design** — structuring code to handle multiple tasks (may run on 1 core).
+- **Parallelism** = **execution** — physically running tasks simultaneously on multiple CPU cores.
+- Go makes concurrency easy with goroutines; parallelism depends on `runtime.GOMAXPROCS()` and available cores.
+
+### Q3: What are channels? What's the difference between buffered and unbuffered?
+**Answer:**
+- **Unbuffered** (`make(chan int)`) — sender blocks until a receiver is ready. It's a synchronous handshake.
+- **Buffered** (`make(chan int, 5)`) — sender blocks only when the buffer is full. Allows async communication up to the buffer size.
+- Channels implement Go's CSP model: "Don't communicate by sharing memory; share memory by communicating."
+
+### Q4: What happens when you send to a closed channel? Read from a closed channel? Close a nil channel?
+**Answer:**
+| Operation | nil channel | closed channel |
+|-----------|-------------|----------------|
+| **Send** | blocks forever | **PANIC** |
+| **Receive** | blocks forever | returns zero value + `false` |
+| **Close** | **PANIC** | **PANIC** |
+
+Rule: Only the **sender** should close a channel, never the receiver.
+
+### Q5: What is a deadlock? How does Go detect it?
+**Answer:** A deadlock occurs when all goroutines are blocked and no progress can be made. Go detects **full deadlocks** at runtime with: `fatal error: all goroutines are asleep - deadlock!`. Common causes: unbuffered send with no receiver, double-locking a `sync.Mutex` (not re-entrant), circular channel dependencies.
+
+### Q6: What is a race condition and how do you detect it?
+**Answer:** A race condition occurs when multiple goroutines access shared data concurrently and at least one writes, without synchronization. Detect with Go's built-in **race detector**: `go run -race main.go` or `go test -race ./...`. Fix with `sync.Mutex`, `sync.RWMutex`, channels, or `sync/atomic`.
+
+### Q7: How does `select` work? What happens with a `default` case?
+**Answer:** `select` waits on multiple channel operations and executes the first one that's ready. If multiple are ready, one is chosen **randomly**. Adding a `default` case makes it **non-blocking** — if no channel is ready, `default` executes immediately. Without `default`, `select` blocks until a case is ready.
+
+### Q8: What is `context.Context` and why is it important?
+**Answer:** `context.Context` is the standard mechanism for:
+- **Cancellation**: `context.WithCancel()` — propagate cancel signals to goroutines.
+- **Timeouts**: `context.WithTimeout()` — auto-cancel after a duration.
+- **Deadlines**: `context.WithDeadline()` — cancel at a specific time.
+- **Values**: `context.WithValue()` — pass request-scoped data.
+It should be the **first parameter** of any function that does I/O or long-running work.
+
+### Q9: What is a goroutine leak and how do you prevent it?
+**Answer:** A goroutine leak happens when a goroutine is blocked forever (on a channel or lock) and can never exit. It stays in memory permanently. Prevention:
+- Always provide an **exit path** (context cancellation, done channel).
+- Always **close channels** when done sending.
+- Use `context.WithTimeout` for operations that might hang.
+
+### Q10: What is the Worker Pool pattern and why is it useful?
+**Answer:** A fixed number of goroutines (workers) read tasks from a shared jobs channel, preventing unbounded goroutine creation. Structure:
+```
+[Producer] → jobs channel → [Worker 1, 2, 3] → results channel → [Collector]
+```
+Benefits: controlled resource usage, backpressure, and predictable memory footprint. In production, use `errgroup.SetLimit()` for a simpler version.
+
+### Q11: What is the difference between `sync.Mutex` and `sync.RWMutex`?
+**Answer:**
+- `sync.Mutex` — exclusive lock; only **one** goroutine (reader or writer) at a time.
+- `sync.RWMutex` — allows **multiple concurrent readers** OR **one exclusive writer**.
+Use `RWMutex` for read-heavy workloads (caches, configs). Use `Mutex` when reads ≈ writes.
+
+### Q12: What is `sync.Once` and what's a common use case?
+**Answer:** `sync.Once` ensures a function runs **exactly once**, even when called from multiple goroutines concurrently. Common use case: **singleton pattern** (lazy initialization of database connections, loggers, or configuration). It's goroutine-safe and more idiomatic than manual locking.

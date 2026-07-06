@@ -55,3 +55,45 @@ go run basics/04_control_flow/main.go
 - The `main` package and `main` function are the entry point of a program.
 - Go is statically typed, meaning variable types are checked at compile time.
 - The short variable declaration `:=` can only be used inside functions.
+
+---
+
+## 🎯 Interview Questions
+
+### Q1: What is the difference between `var` and `:=` in Go?
+**Answer:** `var` can be used both inside and outside functions (package level), and requires explicit type or value. `:=` is the short variable declaration — it can **only** be used inside functions, infers the type automatically, and is more idiomatic for local variables.
+
+### Q2: What are zero values in Go? Give examples.
+**Answer:** When a variable is declared without an explicit initial value, Go assigns it a **zero value**:
+- `int` → `0`
+- `float64` → `0.0`
+- `bool` → `false`
+- `string` → `""` (empty string)
+- `pointer`, `slice`, `map`, `channel`, `interface`, `function` → `nil`
+
+### Q3: What is the difference between a package and a module in Go?
+**Answer:** A **package** is a directory of `.go` files — it's the unit of code organization. A **module** (defined by `go.mod`) is a collection of related packages released together — it's the unit of versioning and distribution. Think of a package as a chapter and a module as the entire book.
+
+### Q4: How does Go control visibility/access of identifiers?
+**Answer:** Go uses **capitalization** instead of keywords like `public`/`private`. Names starting with an **uppercase** letter are exported (accessible outside the package). Names starting with a **lowercase** letter are unexported (package-private).
+
+### Q5: Why does Go only have a `for` loop and no `while` or `do-while`?
+**Answer:** This is a deliberate design choice for **simplicity**. Go's `for` loop can replicate all loop types:
+- `for i := 0; i < n; i++` (standard for)
+- `for condition` (while)
+- `for { }` (infinite/do-while)
+
+### Q6: What is `iota` in Go?
+**Answer:** `iota` is a constant generator used in `const` blocks. It starts at `0` and auto-increments by `1` for each constant in the block. It's commonly used to create enumerations. It resets to `0` in each new `const` block.
+
+### Q7: Can you declare a variable without using it in Go?
+**Answer:** **No.** Go treats unused local variables as a **compile-time error**. This is by design to keep code clean. However, unused **package-level** variables and unused **imports** also cause compile errors (imports can be silenced with `_`).
+
+### Q8: What is the difference between `=` and `:=`?
+**Answer:** `=` is **assignment** — the variable must already be declared. `:=` is **declaration + assignment** — it declares a new variable and assigns a value in one step. `:=` cannot be used outside functions.
+
+### Q9: What is type conversion in Go? Does Go support implicit type conversion?
+**Answer:** Go does **NOT** support implicit type conversion (unlike C/Java). You must explicitly convert types: `float64(myInt)`, `int(myFloat)`. This prevents subtle bugs from automatic coercion.
+
+### Q10: What happens if you have an unused import in Go?
+**Answer:** It's a **compile-time error**. You can use the blank identifier `_` to import a package solely for its side effects (e.g., `import _ "net/http/pprof"`), or use `goimports` to auto-manage imports.
